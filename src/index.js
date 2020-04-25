@@ -6,30 +6,50 @@ import Profile from './Containers/Profile/Profile';
 import Login from './Containers/Login/Login';
 import Wall from './Containers/Wall/Wall'
 import {CssBaseline} from '@material-ui/core';
-import {Redirect, Route, BrowserRouter, Switch} from 'react-router-dom';
-import { store } from './Redux/Store';
-import { Provider } from 'react-redux';
+import {Redirect, BrowserRouter, Route, Switch} from 'react-router-dom';
+import {store} from './Redux/Store';
+import {connect, Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 
-
-let ToRender = (
-        <Switch>
-            <Route path="/profile" component={Profile}/>
-            <Route path="/login" component={Login}/>
-            <Route path="/" component={Wall}/>
-            <Redirect to="/"/>
-        </Switch>
+const privateRoutes = (
+    <>
+        <Route exact path="/profile" component={Profile}/>
+        <Route exact path="/" component={Wall}/>
+        <Redirect to="/" />
+    </>
+)
+const loginRoutes = (
+    <>
+        <Route exact path="/login" component={Login}/>
+        <Redirect to="/login" />
+    </>
+)
+const publicRoutes = (
+    <>
+    </>
+)
+const toRender = props => (
+    <Switch>
+        {props.loggedIn ? privateRoutes : loginRoutes}
+        {publicRoutes}
+    </Switch>
 )
 
+const mapStateToProps = state => {
+    return {
+        loggedIn: state.loggedIn
+    }
+}
+const ToRender = connect(mapStateToProps)(toRender);
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
-        <BrowserRouter>
-            <CssBaseline/>
-            <Nav/>
-            {ToRender}
-        </BrowserRouter>
+            <BrowserRouter>
+                <CssBaseline/>
+                <Nav/>
+                <ToRender/>
+            </BrowserRouter>
         </Provider>
     </React.StrictMode>,
     document.getElementById('root')

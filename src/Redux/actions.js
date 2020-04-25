@@ -14,6 +14,7 @@ export const checkLogStatus = dispatch => {
         if (token) {
             const decoded = decode(token);
             if (decoded.exp >= (Date.now() / 1000)) {
+                setAuthToken(token);
                 dispatch({type: actionTypes.LOGGED_IN, payload: false});
             }
         }
@@ -26,6 +27,7 @@ export const checkLogStatus = dispatch => {
 export const logOut = dispatch => {
     return (dispatch, getState) => {
         localStorage.removeItem("JWToken");
+        setAuthToken(false);
         dispatch({type: actionTypes.LOGGED_OUT})
     };
 };
@@ -36,6 +38,7 @@ export const signInEmail = (email, password) => {
         Axios.post("http://localhost:8000/api/users/login", {email, password})
             .then(res => {
                 localStorage.setItem("JWToken", res.data.token);
+                setAuthToken(res.data.token);
                 dispatch({type: actionTypes.LOGGED_IN, payload: false});
             })
             .catch(e => dispatch({type: actionTypes.ERROR, payload: {

@@ -14,7 +14,6 @@ export const checkLogStatus = dispatch => {
         if (token) {
             const decoded = decode(token);
             if (decoded.exp >= (Date.now() / 1000)) {
-                console.log('test');
                 dispatch({type: actionTypes.LOGGED_IN, payload: false});
             }
         }
@@ -36,7 +35,6 @@ export const signInEmail = (email, password) => {
         dispatch({type: actionTypes.LOGGING_ACTION})
         Axios.post("http://localhost:8000/api/users/login", {email, password})
             .then(res => {
-                console.log(res);
                 localStorage.setItem("JWToken", res.data.token);
                 dispatch({type: actionTypes.LOGGED_IN, payload: false});
             })
@@ -50,7 +48,6 @@ export const signUpEmail = (email, password, name) => {
     return (dispatch, getState) => {
         Axios.post("http://localhost:8000/api/users/register", {email, name, password})
             .then(res => {
-                console.log(res);
                 dispatch(signInEmail(email, password))
             })
             .catch(e => dispatch({type: actionTypes.ERROR, payload: {

@@ -1,7 +1,7 @@
 import * as actionTypes from "./actionTypes";
 
 const messageState = {
-    loggedIn: false,
+    loggedIn: "",
     isAdmin: false,
     loggingAction: false,
     error: null
@@ -17,14 +17,14 @@ const mainReducer = (state = messageState, action) => {
         case actionTypes.LOGGED_IN:
             return {
                 ...state,
-                loggedIn: true,
                 loggingAction: false,
-                isAdmin: action.payload
+                loggedIn: action.payload.loggedIn,
+                isAdmin: action.payload.isAdmin
             };
         case actionTypes.LOGGED_OUT:
             return {
                 ...state,
-                loggedIn: false,
+                loggedIn: "",
                 loggingAction: false,
                 isAdmin: false
             };

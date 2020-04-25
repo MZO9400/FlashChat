@@ -16,7 +16,10 @@ export const checkLogStatus = () => {
             const decoded = decode(token);
             if (decoded.exp >= (Date.now() / 1000)) {
                 setAuthToken(token);
-                dispatch({type: actionTypes.LOGGED_IN, payload: false});
+                dispatch({type: actionTypes.LOGGED_IN, payload: {
+                        isAdmin: false,
+                        loggedIn: decoded.id
+                    }});
             }
         } else {
             dispatch({type: actionTypes.LOGGED_OUT});
@@ -39,7 +42,11 @@ export const signInEmail = (email, password) => {
             .then(res => {
                 localStorage.setItem("JWToken", res.data.token);
                 setAuthToken(res.data.token);
-                dispatch({type: actionTypes.LOGGED_IN, payload: false});
+                const uid = decode(res.data.token).id;
+                dispatch({type: actionTypes.LOGGED_IN, payload: {
+                        isAdmin: false,
+                        loggedIn: uid
+                    }});
             })
             .catch(e => dispatch({
                 type: actionTypes.ERROR, payload: {
@@ -68,3 +75,10 @@ export const resetErrorCode = () => {
         });
     };
 };
+export const getProfileInfo = (uid) => {
+    return () => {
+        Axios.post("http://localhost:8000/api/users/getInfo", {uid})
+            .then(res => console.log(res))
+            .catch(er => console.log(er));
+    }
+}

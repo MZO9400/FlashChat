@@ -2,13 +2,13 @@ import * as actionTypes from "./actionTypes";
 import Axios from 'axios';
 import decode from 'jwt-decode';
 import {setAuthToken} from '../headers';
-export const setLoggingAction = dispatch => {
-    return (dispatch, getState) => {
+export const setLoggingAction = () => {
+    return (dispatch) => {
         dispatch({ type: actionTypes.LOGGING_ACTION });
     };
 };
-export const checkLogStatus = dispatch => {
-    return (dispatch, getState) => {
+export const checkLogStatus = () => {
+    return (dispatch) => {
         dispatch({type: actionTypes.LOGGING_ACTION});
         let token = localStorage.getItem("JWToken");
         if (token) {
@@ -24,8 +24,8 @@ export const checkLogStatus = dispatch => {
     };
 };
 
-export const logOut = dispatch => {
-    return (dispatch, getState) => {
+export const logOut = () => {
+    return (dispatch) => {
         localStorage.removeItem("JWToken");
         setAuthToken(false);
         dispatch({type: actionTypes.LOGGED_OUT})
@@ -33,7 +33,7 @@ export const logOut = dispatch => {
 };
 
 export const signInEmail = (email, password) => {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch({type: actionTypes.LOGGING_ACTION})
         Axios.post("http://localhost:8000/api/users/login", {email, password})
             .then(res => {
@@ -48,11 +48,9 @@ export const signInEmail = (email, password) => {
     };
 };
 export const signUpEmail = (email, password, name) => {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         Axios.post("http://localhost:8000/api/users/register", {email, name, password})
-            .then(res => {
-                dispatch(signInEmail(email, password))
-            })
+            .then(() => dispatch(signInEmail(email, password)))
             .catch(e => dispatch({type: actionTypes.ERROR, payload: {
                 title: "Error",
                 text: e.toString()
@@ -60,7 +58,7 @@ export const signUpEmail = (email, password, name) => {
     };
 };
 export const resetErrorCode = () => {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         return dispatch({
             type: actionTypes.RESET
         });

@@ -57,6 +57,9 @@ function CircularIndeterminate() {
 }
 
 const Nav = props => {
+    React.useEffect(() => {
+        props.checkLogStatus();
+    }, []);
     let title = "Home";
     switch (props.location.pathname) {
         case "/provide-a-service":
@@ -185,6 +188,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
+        checkLogStatus: () => dispatch(actions.checkLogStatus()),
         logOut: () => dispatch(actions.logOut()),
         resetError: () => dispatch(actions.resetErrorCode())
     };

@@ -1,5 +1,7 @@
 import * as actionTypes from "./actionTypes";
-
+import Axios from 'axios';
+import decode from 'jwt-decode';
+import {setAuthToken} from '../headers';
 export const setLoggingAction = dispatch => {
     return (dispatch, getState) => {
         dispatch({ type: actionTypes.LOGGING_ACTION });
@@ -7,78 +9,54 @@ export const setLoggingAction = dispatch => {
 };
 export const checkLogStatus = dispatch => {
     return (dispatch, getState) => {
-        /*firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                firebase
-                    .database()
-                    .ref(`users/${user.uid}`)
-                    .on("value", snap => {
-                        dispatch({
-                            type: actionTypes.LOGGED_IN,
-                            payload: snap.val() ? snap.val().isAdmin : false
-                        });
-                    });
-            } else {
-                dispatch({ type: actionTypes.LOGGED_OUT });
+        dispatch({type: actionTypes.LOGGING_ACTION});
+        let token = localStorage.getItem("JWToken");
+        if (token) {
+            const decoded = decode(token);
+            if (decoded.exp >= (Date.now() / 1000)) {
+                console.log('test');
+                dispatch({type: actionTypes.LOGGED_IN, payload: false});
             }
-        });*/
+        }
+        else {
+            dispatch({type: actionTypes.LOGGED_OUT});
+        }
     };
 };
 
 export const logOut = dispatch => {
     return (dispatch, getState) => {
-        /*firebase
-            .auth()
-            .signOut()
-            .then(response => dispatch({ type: actionTypes.LOGGED_OUT }))
-            .catch(error => {});*/
+        localStorage.removeItem("JWToken");
+        dispatch({type: actionTypes.LOGGED_OUT})
     };
 };
 
 export const signInEmail = (email, password) => {
     return (dispatch, getState) => {
-        /*firebase
-            .auth()
-            .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-            .then(() => {
-                firebase
-                    .auth()
-                    .signInWithEmailAndPassword(email, password)
-                    .then(result => {
-                        return dispatch({
-                            type: actionTypes.LOGGED_IN
-                        });
-                    })
-                    .catch(function(error) {
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
-                        return dispatch({
-                            type: actionTypes.ERROR,
-                            payload: { title: errorCode, text: errorMessage }
-                        });
-                    });
-            });*/
+        dispatch({type: actionTypes.LOGGING_ACTION})
+        Axios.post("http://localhost:8000/api/users/login", {email, password})
+            .then(res => {
+                console.log(res);
+                localStorage.setItem("JWToken", res.data.token);
+                dispatch({type: actionTypes.LOGGED_IN, payload: false});
+            })
+            .catch(e => dispatch({type: actionTypes.ERROR, payload: {
+                    title: "Error",
+                    text: e.toString()
+                }}))
     };
 };
 export const signUpEmail = (email, password, name) => {
     return (dispatch, getState) => {
-        /*firebase
-            .auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then(result => {
-                result.user.updateProfile({
-                    displayName: name
-                });
+        Axios.post("http://localhost:8000/api/users/register", {email, name, password})
+            .then(res => {
+                console.log(res);
+                dispatch(signInEmail(email, password))
             })
-            .catch(function(error) {
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                return dispatch({
-                    type: actionTypes.ERROR,
-                    payload: { title: errorCode, text: errorMessage }
-                });
-            });
-        return dispatch({ type: actionTypes.LOGGED_IN });*/
+            .catch(e => dispatch({type: actionTypes.ERROR, payload: {
+                title: "Error",
+                text: e.toString()
+                }}))
     };
 };
 export const resetErrorCode = () => {

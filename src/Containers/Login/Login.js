@@ -7,11 +7,12 @@ import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import * as actions from "../../Redux/actions";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import DialogModal from "../../Components/DialogModal/DialogModal";
+
 const useStylesSU = makeStyles(theme => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -31,14 +32,15 @@ const useStylesSU = makeStyles(theme => ({
         margin: theme.spacing(3, 0, 2)
     }
 }));
+
 function SignUp(props) {
     const classes = useStylesSU();
     return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline />
+            <CssBaseline/>
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
+                    <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign up
@@ -86,7 +88,7 @@ function SignUp(props) {
                                 onChange={e => props.pass.fn(e)}
                             />
                         </Grid>
-                        <Grid item xs={12}></Grid>
+                        <Grid item xs={12}/>
                     </Grid>
                     <Button
                         fullWidth
@@ -103,7 +105,7 @@ function SignUp(props) {
                             <Link
                                 onClick={() => props.switchSignState()}
                                 variant="body2"
-                                style={{ cursor: "pointer" }}
+                                style={{cursor: "pointer"}}
                             >
                                 Already have an account? Sign in
                             </Link>
@@ -140,10 +142,10 @@ function SignIn(props) {
 
     return (
         <Container component="main" maxWidth="xs">
-            <CssBaseline />
+            <CssBaseline/>
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
+                    <LockOutlinedIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign in
@@ -189,7 +191,7 @@ function SignIn(props) {
                         <Grid item>
                             <Link
                                 onClick={() => props.switchSignState()}
-                                style={{ cursor: "pointer" }}
+                                style={{cursor: "pointer"}}
                                 variant="body2"
                             >
                                 {"Don't have an account? Sign Up"}
@@ -201,6 +203,7 @@ function SignIn(props) {
         </Container>
     );
 }
+
 class LoginPage extends React.Component {
     state = {
         signIn: true,
@@ -217,18 +220,18 @@ class LoginPage extends React.Component {
         return this.state.name.length && this.validateSignIn();
     };
     updateEmail = e => {
-        this.setState({ email: e.target.value });
+        this.setState({email: e.target.value});
     };
     updatePass = e => {
-        this.setState({ pass: e.target.value });
+        this.setState({pass: e.target.value});
     };
     updateName = e => {
-        this.setState({ name: e.target.value });
+        this.setState({name: e.target.value});
     };
 
     switchSignState = () => {
         this.setState(state => {
-            return { signIn: !state.signIn };
+            return {signIn: !state.signIn};
         });
     };
     submit = () => {
@@ -242,6 +245,7 @@ class LoginPage extends React.Component {
             );
         }
     };
+
     render() {
         return (
             <>
@@ -255,17 +259,17 @@ class LoginPage extends React.Component {
                 {this.state.signIn ? (
                     <SignIn
                         switchSignState={this.switchSignState}
-                        pass={{ fn: this.updatePass, val: this.state.pass }}
-                        email={{ fn: this.updateEmail, val: this.state.email }}
+                        pass={{fn: this.updatePass, val: this.state.pass}}
+                        email={{fn: this.updateEmail, val: this.state.email}}
                         submit={this.submit}
                         validity={this.validateSignIn()}
                     />
                 ) : (
                     <SignUp
                         switchSignState={this.switchSignState}
-                        pass={{ fn: this.updatePass, val: this.state.pass }}
-                        email={{ fn: this.updateEmail, val: this.state.email }}
-                        name={{ fn: this.updateName, val: this.state.name }}
+                        pass={{fn: this.updatePass, val: this.state.pass}}
+                        email={{fn: this.updateEmail, val: this.state.email}}
+                        name={{fn: this.updateName, val: this.state.name}}
                         submit={this.submit}
                         validity={this.validateSignUp()}
                     />

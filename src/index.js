@@ -6,7 +6,7 @@ import Profile from './Containers/Profile/Profile';
 import Login from './Containers/Login/Login';
 import Wall from './Containers/Wall/Wall'
 import {CssBaseline} from '@material-ui/core';
-import {Redirect, BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
 import {store} from './Redux/Store';
 import {connect, Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
@@ -15,13 +15,13 @@ const privateRoutes = (
     <>
         <Route exact path="/profile" component={Profile}/>
         <Route exact path="/" component={Wall}/>
-        <Redirect to="/" />
+        <Redirect to="/"/>
     </>
 )
 const loginRoutes = (
     <>
         <Route exact path="/login" component={Login}/>
-        <Redirect to="/login" />
+        <Redirect to="/login"/>
     </>
 )
 const publicRoutes = (

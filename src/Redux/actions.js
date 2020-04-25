@@ -2,9 +2,10 @@ import * as actionTypes from "./actionTypes";
 import Axios from 'axios';
 import decode from 'jwt-decode';
 import {setAuthToken} from '../headers';
+
 export const setLoggingAction = () => {
     return (dispatch) => {
-        dispatch({ type: actionTypes.LOGGING_ACTION });
+        dispatch({type: actionTypes.LOGGING_ACTION});
     };
 };
 export const checkLogStatus = () => {
@@ -17,8 +18,7 @@ export const checkLogStatus = () => {
                 setAuthToken(token);
                 dispatch({type: actionTypes.LOGGED_IN, payload: false});
             }
-        }
-        else {
+        } else {
             dispatch({type: actionTypes.LOGGED_OUT});
         }
     };
@@ -41,20 +41,24 @@ export const signInEmail = (email, password) => {
                 setAuthToken(res.data.token);
                 dispatch({type: actionTypes.LOGGED_IN, payload: false});
             })
-            .catch(e => dispatch({type: actionTypes.ERROR, payload: {
+            .catch(e => dispatch({
+                type: actionTypes.ERROR, payload: {
                     title: "Error",
                     text: e.toString()
-                }}))
+                }
+            }))
     };
 };
 export const signUpEmail = (email, password, name) => {
     return (dispatch) => {
         Axios.post("http://localhost:8000/api/users/register", {email, name, password})
             .then(() => dispatch(signInEmail(email, password)))
-            .catch(e => dispatch({type: actionTypes.ERROR, payload: {
-                title: "Error",
-                text: e.toString()
-                }}))
+            .catch(e => dispatch({
+                type: actionTypes.ERROR, payload: {
+                    title: "Error",
+                    text: e.toString()
+                }
+            }))
     };
 };
 export const resetErrorCode = () => {

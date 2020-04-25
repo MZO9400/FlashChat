@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -11,17 +11,11 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import HomeIcon from "@material-ui/icons/Home";
 import FavoriteRoundedIcon from "@material-ui/icons/FavoriteRounded";
 import StarsIcon from "@material-ui/icons/Stars";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import {
-    SwipeableDrawer,
-    Divider,
-    List,
-    ListItem,
-    ListItemText,
-    ListItemIcon
-} from "@material-ui/core";
+import {withRouter} from "react-router-dom";
+import {connect} from "react-redux";
+import {Divider, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer} from "@material-ui/core";
 import * as actions from "../../Redux/actions";
+
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1
@@ -46,12 +40,13 @@ const useStylesProgress = makeStyles(theme => ({
         }
     }
 }));
+
 function CircularIndeterminate() {
     const classes = useStylesProgress();
 
     return (
         <div className={classes.root}>
-            <CircularProgress color="secondary" />
+            <CircularProgress color="secondary"/>
         </div>
     );
 }
@@ -60,7 +55,7 @@ const Nav = props => {
     React.useEffect(() => {
         props.checkLogStatus();
     }, []);
-    let title = "Home";
+    let title;
     switch (props.location.pathname) {
         case "/provide-a-service":
             title = "Provide a service";
@@ -83,7 +78,7 @@ const Nav = props => {
     let volunteers = props.isAdmin ? (
         <ListItem onClick={() => props.history.push("/volunteers")}>
             <ListItemIcon>
-                <StarsIcon />
+                <StarsIcon/>
             </ListItemIcon>
             <ListItemText>Volunteers</ListItemText>
         </ListItem>
@@ -100,14 +95,14 @@ const Nav = props => {
                             aria-label="menu"
                             onClick={() => setDrawer(true)}
                         >
-                            <MenuIcon />
+                            <MenuIcon/>
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
                             {title}
                         </Typography>
-                        {props.isAdmin ? <StarsIcon /> : null}
+                        {props.isAdmin ? <StarsIcon/> : null}
                         {props.loggingAction ? (
-                            <CircularIndeterminate />
+                            <CircularIndeterminate/>
                         ) : props.loggedIn ? (
                             <Button color="inherit" onClick={() => props.logOut()}>
                                 Sign Out
@@ -138,27 +133,27 @@ const Nav = props => {
                     <List>
                         <ListItem onClick={() => props.history.push("/")}>
                             <ListItemIcon>
-                                <HomeIcon />
+                                <HomeIcon/>
                             </ListItemIcon>
                             <ListItemText>Home</ListItemText>
                         </ListItem>
                         <ListItem onClick={() => props.history.push("/profile")}>
                             <ListItemIcon>
-                                <FavoriteRoundedIcon />
+                                <FavoriteRoundedIcon/>
                             </ListItemIcon>
                             <ListItemText>Profile</ListItemText>
                         </ListItem>
                     </List>
-                    <Divider />
+                    <Divider/>
                     {volunteers}
 
                     {props.loggingAction ? (
-                        <CircularIndeterminate />
+                        <CircularIndeterminate/>
                     ) : props.loggedIn ? (
                         <List onClick={() => props.logOut()}>
                             <ListItem>
                                 <ListItemIcon>
-                                    <AccountCircleIcon />
+                                    <AccountCircleIcon/>
                                 </ListItemIcon>
                                 <ListItemText>Sign out</ListItemText>
                             </ListItem>
@@ -167,7 +162,7 @@ const Nav = props => {
                         <List onClick={() => props.history.push("/login")}>
                             <ListItem>
                                 <ListItemIcon>
-                                    <AccountCircleIcon />
+                                    <AccountCircleIcon/>
                                 </ListItemIcon>
                                 <ListItemText>Sign in</ListItemText>
                             </ListItem>

@@ -1,4 +1,5 @@
 import * as actionTypes from "./actionTypes";
+
 const messageState = {
     loggedIn: false,
     isAdmin: false,
@@ -30,10 +31,10 @@ const mainReducer = (state = messageState, action) => {
         case actionTypes.ERROR:
             return {
                 ...state,
-                error: { title: action.payload.title, text: action.payload.text }
+                error: {title: action.payload.title, text: action.payload.text}
             };
         case actionTypes.RESET:
-            return { ...state, error: null };
+            return {...state, error: null};
         default:
             return state;
     }

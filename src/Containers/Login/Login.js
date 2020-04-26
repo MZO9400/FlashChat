@@ -251,15 +251,21 @@ class LoginPage extends React.Component {
             return {signIn: !state.signIn};
         });
     };
+    redirect = () => {
+        let afterLogin = this.props.location.data.from.pathname;
+        if (afterLogin === "/login") afterLogin = "/";
+        this.props.history.push(afterLogin);
+    }
     submit = () => {
         if (this.state.signIn) {
-            this.props.signInEmail(this.state.email, this.state.pass);
+            this.props.signInEmail(this.state.email, this.state.pass, this.redirect);
         } else {
             this.props.signUpEmail(
                 this.state.email,
                 this.state.pass,
                 this.state.name,
-                this.state.username
+                this.state.username,
+                this.redirect
             );
         }
     };
@@ -298,9 +304,9 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        signInEmail: (user, pass) => dispatch(actions.signInEmail(user, pass)),
-        signUpEmail: (email, pass, name, user) =>
-            dispatch(actions.signUpEmail(email, pass, name, user))
+        signInEmail: (user, pass, callback) => dispatch(actions.signInEmail(user, pass, callback)),
+        signUpEmail: (email, pass, name, user, callback) =>
+            dispatch(actions.signUpEmail(email, pass, name, user, callback))
     };
 };
 

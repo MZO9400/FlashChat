@@ -8,7 +8,7 @@ export const setLoggingAction = () => {
         dispatch({type: actionTypes.LOGGING_ACTION});
     };
 };
-export const checkLogStatus = () => {
+export const checkLogStatus = (callback) => {
     return (dispatch) => {
         dispatch({type: actionTypes.LOGGING_ACTION});
         let token = localStorage.getItem("JWToken");
@@ -16,6 +16,7 @@ export const checkLogStatus = () => {
             const decoded = decode(token);
             if (decoded.exp >= (Date.now() / 1000)) {
                 setAuthToken(token);
+                callback && callback();
                 return dispatch({
                     type: actionTypes.LOGGED_IN, payload: {
                         isAdmin: false,
@@ -36,7 +37,8 @@ export const logOut = () => {
     };
 };
 
-export const signInEmail = (email, password) => {
+export const signInEmail = (email, password, callback) => {
+    console.log(callback);
     return (dispatch) => {
         dispatch({type: actionTypes.LOGGING_ACTION})
         Axios.post("http://localhost:8000/api/users/login", {email, password})
@@ -50,16 +52,19 @@ export const signInEmail = (email, password) => {
                         loggedIn: uid
                     }
                 });
+                callback && callback();
             })
-            .catch(e => dispatch({
-                type: actionTypes.ERROR, payload: {title: e.response.statusText, text: e.response.data.error}
-            }))
+            .catch(e => {
+                dispatch({
+                    type: actionTypes.ERROR, payload: {title: e.response.statusText, text: e.response.data.error}
+                })
+            })
     };
 };
-export const signUpEmail = (email, password, name, user) => {
+export const signUpEmail = (email, password, name, user, callback) => {
     return (dispatch) => {
         Axios.post("http://localhost:8000/api/users/register", {email, name, password, user})
-            .then(() => dispatch(signInEmail(email, password)))
+            .then(() => dispatch(signInEmail(email, password, callback)))
             .catch(e => dispatch({
                 type: actionTypes.ERROR, payload: {title: e.response.statusText, text: e.response.data.error}
             }))

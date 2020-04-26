@@ -16,10 +16,12 @@ export const checkLogStatus = () => {
             const decoded = decode(token);
             if (decoded.exp >= (Date.now() / 1000)) {
                 setAuthToken(token);
-                return dispatch({type: actionTypes.LOGGED_IN, payload: {
+                return dispatch({
+                    type: actionTypes.LOGGED_IN, payload: {
                         isAdmin: false,
                         loggedIn: decoded.id
-                    }});
+                    }
+                });
             }
         }
         dispatch({type: actionTypes.LOGGED_OUT});
@@ -42,10 +44,12 @@ export const signInEmail = (email, password) => {
                 localStorage.setItem("JWToken", res.data.token);
                 setAuthToken(res.data.token);
                 const uid = decode(res.data.token).id;
-                dispatch({type: actionTypes.LOGGED_IN, payload: {
+                dispatch({
+                    type: actionTypes.LOGGED_IN, payload: {
                         isAdmin: false,
                         loggedIn: uid
-                    }});
+                    }
+                });
             })
             .catch(e => dispatch({
                 type: actionTypes.ERROR, payload: {title: e.response.statusText, text: e.response.data.error}

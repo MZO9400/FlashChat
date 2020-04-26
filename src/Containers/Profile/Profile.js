@@ -1,7 +1,7 @@
 import React from "react";
 import {connect} from 'react-redux'
 import {getProfileInfo} from "../../Redux/actions";
-import {Typography, Avatar, Card} from "@material-ui/core";
+import {Avatar, Card, Typography} from "@material-ui/core";
 import CSS from './Profile.module.css';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
@@ -11,15 +11,6 @@ import Axios from 'axios';
 import * as actionTypes from '../../Redux/actionTypes';
 
 class Profile extends React.Component {
-    componentDidMount = async () => {
-         const {data} = await getProfileInfo(this.props.uid);
-         this.setState({
-             name: data.name,
-             email: data.email,
-             date: data.date,
-             username: data._id
-         })
-    }
     state = {
         name: "",
         email: "",
@@ -28,6 +19,17 @@ class Profile extends React.Component {
         newPass: "",
         editing: false
     }
+
+    componentDidMount = async () => {
+        const {data} = await getProfileInfo(this.props.uid);
+        this.setState({
+            name: data.name,
+            email: data.email,
+            date: data.date,
+            username: data._id
+        })
+    }
+
     changeName = (v) => {
         this.setState({name: v});
     }
@@ -56,28 +58,29 @@ class Profile extends React.Component {
             }
         }).catch(e => this.props.setError({title: e.response.statusText, text: e.response.data.error}))
     }
+
     render() {
         let toShow = (<>
             <EditIcon className={CSS.editIcon} onClick={() => this.setState({editing: true})}/>
-        <Avatar className={CSS.avatar}>{this.state.name && this.state.name[0].toUpperCase()}</Avatar>
-        <Typography>
-            {this.state.name}
-        </Typography>
-        <Typography>
-            {this.state.email}
-        </Typography>
+            <Avatar className={CSS.avatar}>{this.state.name && this.state.name[0].toUpperCase()}</Avatar>
+            <Typography>
+                {this.state.name}
+            </Typography>
+            <Typography>
+                {this.state.email}
+            </Typography>
 
-        <Typography>
-            {this.state.username}
-        </Typography>
-        <Typography>
-            {new Date(this.state.date).toLocaleString()}
-        </Typography>
+            <Typography>
+                {this.state.username}
+            </Typography>
+            <Typography>
+                {new Date(this.state.date).toLocaleString()}
+            </Typography>
         </>);
         if (this.state.editing) {
             toShow = (
                 <>
-                    <SaveIcon className={CSS.editIcon} onClick={this.updateProfile} />
+                    <SaveIcon className={CSS.editIcon} onClick={this.updateProfile}/>
                     <Avatar className={CSS.avatar}>{this.state.name && this.state.name[0].toUpperCase()}</Avatar>
                     <form className={CSS.inputForm}>
                         <div className={CSS.inputpadding}>
@@ -128,6 +131,7 @@ class Profile extends React.Component {
         )
     }
 }
+
 const mapDispatchToProps = dispatch => {
     return {
         setError: (payload) => dispatch({type: actionTypes.ERROR, payload})

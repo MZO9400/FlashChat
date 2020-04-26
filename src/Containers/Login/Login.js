@@ -11,6 +11,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import * as actions from "../../Redux/actions";
 import {connect} from "react-redux";
+
 const useStylesSU = makeStyles(theme => ({
     paper: {
         marginTop: theme.spacing(8),

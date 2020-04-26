@@ -48,7 +48,7 @@ ReactDOM.render(
         <Provider store={store}>
             <BrowserRouter>
                 <CssBaseline/>
-                <ErrorHandler />
+                <ErrorHandler/>
                 <Nav/>
                 <ToRender/>
             </BrowserRouter>

@@ -16,14 +16,13 @@ export const checkLogStatus = () => {
             const decoded = decode(token);
             if (decoded.exp >= (Date.now() / 1000)) {
                 setAuthToken(token);
-                dispatch({type: actionTypes.LOGGED_IN, payload: {
+                return dispatch({type: actionTypes.LOGGED_IN, payload: {
                         isAdmin: false,
                         loggedIn: decoded.id
                     }});
             }
-        } else {
-            dispatch({type: actionTypes.LOGGED_OUT});
         }
+        dispatch({type: actionTypes.LOGGED_OUT});
     };
 };
 
@@ -49,22 +48,16 @@ export const signInEmail = (email, password) => {
                     }});
             })
             .catch(e => dispatch({
-                type: actionTypes.ERROR, payload: {
-                    title: "Error",
-                    text: e.toString()
-                }
+                type: actionTypes.ERROR, payload: {title: e.response.statusText, text: e.response.data.error}
             }))
     };
 };
-export const signUpEmail = (email, password, name) => {
+export const signUpEmail = (email, password, name, user) => {
     return (dispatch) => {
-        Axios.post("http://localhost:8000/api/users/register", {email, name, password})
+        Axios.post("http://localhost:8000/api/users/register", {email, name, password, user})
             .then(() => dispatch(signInEmail(email, password)))
             .catch(e => dispatch({
-                type: actionTypes.ERROR, payload: {
-                    title: "Error",
-                    text: e.toString()
-                }
+                type: actionTypes.ERROR, payload: {title: e.response.statusText, text: e.response.data.error}
             }))
     };
 };
@@ -76,9 +69,7 @@ export const resetErrorCode = () => {
     };
 };
 export const getProfileInfo = (uid) => {
-    return () => {
-        Axios.post("http://localhost:8000/api/users/getInfo", {uid})
-            .then(res => console.log(res))
-            .catch(er => console.log(er));
-    }
+    return Axios.post("http://localhost:8000/api/users/getInfo", {uid})
+        .then(res => res)
+        .catch(er => console.log(er));
 }

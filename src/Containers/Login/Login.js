@@ -11,8 +11,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import * as actions from "../../Redux/actions";
 import {connect} from "react-redux";
-import DialogModal from "../../Components/DialogModal/DialogModal";
-
 const useStylesSU = makeStyles(theme => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -72,6 +70,19 @@ function SignUp(props) {
                                 autoComplete="email"
                                 value={props.email.val}
                                 onChange={e => props.email.fn(e)}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="username"
+                                label="User name"
+                                name="username"
+                                autoComplete="username"
+                                value={props.username.val}
+                                onChange={e => props.username.fn(e)}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -209,7 +220,8 @@ class LoginPage extends React.Component {
         signIn: true,
         name: "",
         pass: "",
-        email: ""
+        email: "",
+        username: ""
     };
     validateSignIn = () => {
         const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g;
@@ -217,7 +229,8 @@ class LoginPage extends React.Component {
         return emailRegex.test(this.state.email) && passRegex.test(this.state.pass);
     };
     validateSignUp = () => {
-        return this.state.name.length && this.validateSignIn();
+        const usernameRegex = /^[a-z0-9_]{3,16}$/igm;
+        return this.state.name.length && this.validateSignIn() && usernameRegex.test(this.state.username);
     };
     updateEmail = e => {
         this.setState({email: e.target.value});
@@ -227,6 +240,9 @@ class LoginPage extends React.Component {
     };
     updateName = e => {
         this.setState({name: e.target.value});
+    };
+    updateUsername = e => {
+        this.setState({username: e.target.value});
     };
 
     switchSignState = () => {
@@ -241,7 +257,8 @@ class LoginPage extends React.Component {
             this.props.signUpEmail(
                 this.state.email,
                 this.state.pass,
-                this.state.name
+                this.state.name,
+                this.state.username
             );
         }
     };
@@ -249,13 +266,6 @@ class LoginPage extends React.Component {
     render() {
         return (
             <>
-                {this.props.error ? (
-                    <DialogModal
-                        title={this.props.error.title}
-                        text={this.props.error.text}
-                        accept={() => this.props.resetError()}
-                    />
-                ) : null}
                 {this.state.signIn ? (
                     <SignIn
                         switchSignState={this.switchSignState}
@@ -270,6 +280,7 @@ class LoginPage extends React.Component {
                         pass={{fn: this.updatePass, val: this.state.pass}}
                         email={{fn: this.updateEmail, val: this.state.email}}
                         name={{fn: this.updateName, val: this.state.name}}
+                        username={{fn: this.updateUsername, val: this.state.username}}
                         submit={this.submit}
                         validity={this.validateSignUp()}
                     />
@@ -281,16 +292,14 @@ class LoginPage extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        loggedIn: state.loggedIn,
-        error: state.error
+        loggedIn: state.loggedIn
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
         signInEmail: (user, pass) => dispatch(actions.signInEmail(user, pass)),
-        signUpEmail: (user, pass, name) =>
-            dispatch(actions.signUpEmail(user, pass, name)),
-        resetError: () => dispatch(actions.resetErrorCode())
+        signUpEmail: (email, pass, name, user) =>
+            dispatch(actions.signUpEmail(email, pass, name, user))
     };
 };
 

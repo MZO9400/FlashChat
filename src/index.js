@@ -10,6 +10,7 @@ import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
 import {store} from './Redux/Store';
 import {connect, Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
+import ErrorHandler from "./ErrorHandler";
 
 const privateRoutes = (
     <>
@@ -37,7 +38,7 @@ const toRender = props => (
 
 const mapStateToProps = state => {
     return {
-        loggedIn: state.loggedIn
+        loggedIn: state.loggedIn,
     }
 }
 const ToRender = connect(mapStateToProps)(toRender);
@@ -47,6 +48,7 @@ ReactDOM.render(
         <Provider store={store}>
             <BrowserRouter>
                 <CssBaseline/>
+                <ErrorHandler />
                 <Nav/>
                 <ToRender/>
             </BrowserRouter>

@@ -6,26 +6,24 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-export default function AlertDialog(props) {
-    return (
-        <div>
-            <Dialog
-                open
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        {props.text}
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={props.accept} color="primary" autoFocus>
-                        {props.buttonText ? props.buttonText : `Try again`}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
-}
+export default props => (
+    <div>
+        <Dialog
+            open={props.open}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    {props.text}
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={props.accept} color="primary" autoFocus>
+                    {props.buttonText ? props.buttonText : `Close`}
+                </Button>
+            </DialogActions>
+        </Dialog>
+    </div>
+);

@@ -38,7 +38,6 @@ export const logOut = () => {
 };
 
 export const signInEmail = (email, password, callback) => {
-    console.log(callback);
     return (dispatch) => {
         dispatch({type: actionTypes.LOGGING_ACTION})
         Axios.post("http://localhost:8000/api/users/login", {email, password})

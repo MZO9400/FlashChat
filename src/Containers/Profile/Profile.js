@@ -125,9 +125,14 @@ class Profile extends React.Component {
             )
         }
         return (
-            <Card className={CSS.root}>
-                {toShow}
-            </Card>
+            <>
+                <Card className={CSS.root}>
+                    {toShow}
+                </Card>
+                <Card className={CSS.root}>
+                    //TODO: Fetch and show comments along with delete, and hide
+                </Card>
+            </>
         )
     }
 }

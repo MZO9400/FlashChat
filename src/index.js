@@ -7,7 +7,7 @@ import Login from './Containers/Login/Login';
 import Wall from './Containers/Wall/Wall'
 import UserProfile from './Containers/UserProfile/UserProfile';
 import {CssBaseline} from '@material-ui/core';
-import {BrowserRouter, Redirect, Route, Switch, withRouter} from 'react-router-dom';
+import {BrowserRouter, Redirect, Route, withRouter} from 'react-router-dom';
 import {store} from './Redux/Store';
 import {connect, Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
@@ -16,9 +16,8 @@ import ErrorHandler from "./ErrorHandler";
 const toRender = props => {
     const privateRoutes = (
         <>
-            <Route exact path="/profile" component={Profile}/>
             <Route exact path="/" component={Wall}/>
-            <Redirect to="/"/>
+            <Route exact path="/profile" component={Profile}/>
         </>
     )
     const loginRoutes = (
@@ -26,7 +25,7 @@ const toRender = props => {
             <Route exact path="/login" component={Login}/>
             <Redirect to={{
                 pathname: '/login',
-                data: { from: props.location },
+                data: {from: props.location},
             }}/>
         </>
     )
@@ -38,11 +37,9 @@ const toRender = props => {
     return (
         <>
             <Nav redirect={props.location}/>
-                <Switch>
-                    {props.loggedIn ? privateRoutes : loginRoutes}
-                    {publicRoutes}
-                </Switch>
-            </>
+            {props.loggedIn ? privateRoutes : loginRoutes}
+            {publicRoutes}
+        </>
     )
 }
 

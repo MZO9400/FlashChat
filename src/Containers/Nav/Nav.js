@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import AccountCircle from "@material-ui/icons/AccountCircle";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import HomeIcon from "@material-ui/icons/Home";
 import FavoriteRoundedIcon from "@material-ui/icons/FavoriteRounded";
@@ -15,6 +16,9 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {Divider, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer} from "@material-ui/core";
 import * as actions from "../../Redux/actions";
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -56,6 +60,7 @@ const Nav = props => {
         props.checkLogStatus(() =>
             props.history.push(props.redirect === "/login" ? "/" : props.redirect));
     }, []);
+    let [loggedInMenuOpen, setLoggedInMenuOpen] = React.useState(null);
     let title;
     switch (props.location.pathname) {
         case "/provide-a-service":
@@ -105,9 +110,28 @@ const Nav = props => {
                         {props.loggingAction ? (
                             <CircularIndeterminate/>
                         ) : props.loggedIn ? (
-                            <Button color="inherit" onClick={() => props.logOut()}>
-                                Sign Out
-                            </Button>
+                            <>
+                                <span style={{display: "flex", cursor: "pointer"}}
+                                      onClick={(e) => setLoggedInMenuOpen(e.currentTarget)}>
+                                    <AccountCircle/>
+                                    <Typography style={{marginLeft: "0.5em"}}>{props.loggedIn}</Typography>
+                                </span>
+                                <Menu
+                                    anchorEl={loggedInMenuOpen}
+                                    keepMounted
+                                    open={loggedInMenuOpen}
+                                    onClose={() => setLoggedInMenuOpen(null)}
+                                >
+                                    <MenuItem onClick={() => {
+                                        setLoggedInMenuOpen(null);
+                                        props.history.push("/profile")
+                                    }}>Profile</MenuItem>
+                                    <MenuItem onClick={() => {
+                                        setLoggedInMenuOpen(null);
+                                        props.logOut();
+                                    }}>Logout</MenuItem>
+                                </Menu>
+                            </>
                         ) : (
                             <Button
                                 color="inherit"

@@ -70,7 +70,9 @@ class Profile extends React.Component {
                 {this.state.email}
             </Typography>
 
-            <Typography>
+            <Typography onClick={() => this.props.history.push(`/u/${this.state.username}`)} style={{cursor: "pointer"}}
+                        color="textSecondary"
+            >
                 {this.state.username}
             </Typography>
             <Typography>

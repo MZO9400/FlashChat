@@ -16,6 +16,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import HowToRegIcon from '@material-ui/icons/HowToReg';
+import HourglassFullIcon from '@material-ui/icons/HourglassFull';
 
 class UserProfile extends React.Component {
     state = {
@@ -25,15 +28,22 @@ class UserProfile extends React.Component {
         commentEditTitle: "",
         commentEditText: "",
         editing: false,
+        isFriend: "none",
         comments: []
     }
-    componentDidUpdate = () => {
+    componentDidUpdate = (prevProps) => {
         if (this.props.match.params.id !== this.state.id) {
             this.componentDidMount();
         }
+        if (this.props.loggedIn !== prevProps.loggedIn && this.props.loggedIn !== false) {
+            Axios.post("http://localhost:8000/api/users/getFriendshipStatus", {id: this.state.id})
+                .then(response => this.setState({isFriend: response.data.friendshipStatus}))
+                .catch(e => {
+                    this.props.setError({title: "Error", text: e.response.data.error})
+                });
+        }
     }
-
-    componentDidMount = () => {
+    componentDidMount = async () => {
         const {id} = this.props.match.params;
         this.setState({id})
         Axios.post("http://localhost:8000/api/users/getInfoPub", {uid: id})
@@ -83,6 +93,17 @@ class UserProfile extends React.Component {
                 this.setState({comments});
             }
         }).catch(e => this.props.setError({title: e.response.statusText, text: e.response.data.error}))
+    }
+    toggleFriend = () => {
+        Axios.post("http://localhost:8000/api/users/toggleFriend", {_id: this.state.id})
+            .then(() => {
+                if (this.state.isFriend === "none") {
+                    this.setState({isFriend: "pending"});
+                } else {
+                    this.setState({isFriend: "none"});
+                }
+            })
+            .catch(e => this.props.setError({title: "Error", text: e.response.data.error}));
     }
 
     render() {
@@ -141,6 +162,12 @@ class UserProfile extends React.Component {
             <Container maxWidth="md">
                 {editing}
                 <Card className={CSS.root}>
+                    {(this.state.id !== this.props.loggedIn) ? this.state.isFriend === "none" ?
+                        <PersonAddIcon className={CSS.editIcon} onClick={this.toggleFriend}/> :
+                        this.state.isFriend === "pending" ?
+                            <HourglassFullIcon className={CSS.editIcon} onClick={this.toggleFriend}/> :
+                            <HowToRegIcon className={CSS.editIcon} onClick={this.toggleFriend}/> : null
+                    }
                     <Typography color="textSecondary">{this.state.id}</Typography>
                     {this.state.name && <Typography>{this.state.name}</Typography>}
                 </Card>

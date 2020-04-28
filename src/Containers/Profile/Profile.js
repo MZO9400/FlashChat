@@ -163,7 +163,7 @@ class Profile extends React.Component {
                 {this.state.comments.length > 0 &&
                 <Card className={CSS.posts}>
                     {this.state.comments.map((val, key) => (
-                        <Card className={CSS.postCard}>
+                        <Card className={CSS.postCard} key={key}>
                             {val.hidden ?
                                 <AddIcon className={CSS.editIcon} onClick={() => this.toggleVisibility(val._id)}/> :
                                 <ClearIcon className={CSS.editIcon} onClick={() => this.toggleVisibility(val._id)}/>

@@ -167,7 +167,7 @@ class UserProfile extends React.Component {
                 {this.state.comments.length > 0 &&
                 <Card className={CSS.posts}>
                     {this.state.comments.map((val, key) => (
-                        <Card className={CSS.postCard}>
+                        <Card className={CSS.postCard} key={key}>
                             {val.fromID === this.props.loggedIn &&
                             <>
                                 <EditIcon

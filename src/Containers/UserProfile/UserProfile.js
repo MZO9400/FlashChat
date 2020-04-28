@@ -27,6 +27,11 @@ class UserProfile extends React.Component {
         editing: null,
         comments: []
     }
+    componentDidUpdate = () => {
+        if (this.props.match.params.id !== this.state.id) {
+            this.componentDidMount();
+        }
+    }
 
     componentDidMount = () => {
         const {id} = this.props.match.params;

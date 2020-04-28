@@ -60,7 +60,7 @@ const Nav = props => {
         props.checkLogStatus(() =>
             props.history.push(props.redirect === "/login" ? "/" : props.redirect));
     }, []);
-    let [loggedInMenuOpen, setLoggedInMenuOpen] = React.useState(null);
+    let [loggedInMenuOpen, setLoggedInMenuOpen] = React.useState(false);
     let title;
     switch (props.location.pathname) {
         case "/provide-a-service":
@@ -117,17 +117,17 @@ const Nav = props => {
                                     <Typography style={{marginLeft: "0.5em"}}>{props.loggedIn}</Typography>
                                 </span>
                                 <Menu
-                                    anchorEl={loggedInMenuOpen}
+                                    anchorEl={loggedInMenuOpen === false ? null : loggedInMenuOpen}
                                     keepMounted
                                     open={loggedInMenuOpen}
-                                    onClose={() => setLoggedInMenuOpen(null)}
+                                    onClose={() => setLoggedInMenuOpen(false)}
                                 >
                                     <MenuItem onClick={() => {
-                                        setLoggedInMenuOpen(null);
+                                        setLoggedInMenuOpen(false);
                                         props.history.push("/profile")
                                     }}>Profile</MenuItem>
                                     <MenuItem onClick={() => {
-                                        setLoggedInMenuOpen(null);
+                                        setLoggedInMenuOpen(false);
                                         props.logOut();
                                     }}>Logout</MenuItem>
                                 </Menu>

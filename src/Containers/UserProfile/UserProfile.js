@@ -35,7 +35,7 @@ class UserProfile extends React.Component {
         if (this.props.match.params.id !== this.state.id) {
             this.componentDidMount();
         }
-        if (this.props.loggedIn !== prevProps.loggedIn && this.props.loggedIn !== false) {
+        if (this.props.loggedIn !== prevProps.loggedIn && this.props.loggedIn !== "") {
             Axios.post("http://localhost:8000/api/users/getFriendshipStatus", {id: this.state.id})
                 .then(response => this.setState({isFriend: response.data.friendshipStatus}))
                 .catch(e => {
@@ -228,7 +228,8 @@ class UserProfile extends React.Component {
                             <Typography variant="h6" style={{fontWeight: "bold"}}>{val.title}</Typography>
                             <Typography variant="body1">{val.comment}</Typography>
                             {val.edited && <Typography
-                                variant="body2">{`Edited at ${new Date(val.editedTime).toLocaleString()}`}</Typography>}
+                                variant="body2"
+                                style={{fontSize: "0.5rem"}}>{`Edited at ${new Date(val.editedTime).toLocaleString()}`}</Typography>}
                         </Card>
                     ))}
                 </Card>

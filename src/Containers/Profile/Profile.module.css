@@ -20,6 +20,7 @@
 .postCard {
     position: relative;
     padding: 2.5% 5%;
+    margin: 1em;
 }
 
 .avatar {
@@ -34,7 +35,7 @@
 }
 
 .removeIcon {
-    right: 5%;
+    right: 10%;
 }
 
 .inputForm {

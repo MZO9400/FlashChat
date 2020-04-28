@@ -95,6 +95,9 @@ class UserProfile extends React.Component {
         }).catch(e => this.props.setError({title: e.response.statusText, text: e.response.data.error}))
     }
     toggleFriend = () => {
+        if (!this.props.loggedIn) {
+            this.props.history.push("/login");
+        }
         Axios.post("http://localhost:8000/api/users/toggleFriend", {_id: this.state.id})
             .then(() => {
                 if (this.state.isFriend === "none") {

@@ -24,7 +24,7 @@ class UserProfile extends React.Component {
         newPostText: "",
         commentEditTitle: "",
         commentEditText: "",
-        editing: null,
+        editing: false,
         comments: []
     }
     componentDidUpdate = () => {
@@ -111,7 +111,7 @@ class UserProfile extends React.Component {
                 <DialogActions>
                     <Button onClick={() => {
                         this.setState({
-                            editing: null,
+                            editing: false,
                             commentEditTitle: "",
                             commentEditText: ""
                         })
@@ -125,7 +125,7 @@ class UserProfile extends React.Component {
                             .then(() => {
                                 let comments = [...this.state.comments].filter(x => x._id !== this.state.editing);
                                 this.setState({
-                                    editing: null,
+                                    editing: false,
                                     commentEditTitle: "",
                                     commentEditText: "",
                                     comments
@@ -157,7 +157,7 @@ class UserProfile extends React.Component {
                         <TextField
                             multiline
                             placeholder="Write something."
-                            maxRows="8"
+                            maxrows="8"
                             value={this.state.newPostText}
                             onChange={(e) => this.setState({newPostText: e.target.value})}
                             fullWidth

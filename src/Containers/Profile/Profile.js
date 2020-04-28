@@ -5,6 +5,9 @@ import {Avatar, Card, Typography} from "@material-ui/core";
 import CSS from './Profile.module.css';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
+import AddIcon from '@material-ui/icons/Add';
+import ClearIcon from '@material-ui/icons/Clear';
+import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
 import {withRouter} from 'react-router-dom';
 import Axios from 'axios';
@@ -17,7 +20,8 @@ class Profile extends React.Component {
         date: "",
         currentPass: "",
         newPass: "",
-        editing: false
+        editing: false,
+        comments: []
     }
 
     componentDidMount = async () => {
@@ -28,6 +32,8 @@ class Profile extends React.Component {
             date: data.date,
             username: data._id
         })
+        Axios.post("http://localhost:8000/api/comments/getAll", {userID: this.props.uid})
+            .then(res => this.setState({comments: res.data ? res.data : []}));
     }
 
     changeName = (v) => {
@@ -55,6 +61,29 @@ class Profile extends React.Component {
         Axios.post("http://localhost:8000/api/users/setInfo", data).then(res => {
             if (res.status === 200) {
                 this.props.history.push("/");
+            }
+        }).catch(e => this.props.setError({title: e.response.statusText, text: e.response.data.error}))
+    }
+    toggleVisibility = (_id) => {
+        Axios.post("http://localhost:8000/api/comments/toggleVisibility", {_id}).then(res => {
+            if (res.status === 200) {
+                const comments = [...this.state.comments];
+                for (let i = 0; i < comments.length; i++) {
+                    if (comments[i]._id === _id) {
+                        comments[i].hidden = !comments[i].hidden;
+                        break;
+                    }
+                }
+                this.setState({comments});
+            }
+        }).catch(e => this.props.setError({title: e.response.statusText, text: e.response.data.error}))
+    }
+    deleteComment = (_id) => {
+        Axios.post("http://localhost:8000/api/comments/delete", {_id}).then(res => {
+            if (res.status === 200) {
+                console.log(res);
+                const comments = [...this.state.comments].filter(i => i._id !== _id);
+                this.setState({comments});
             }
         }).catch(e => this.props.setError({title: e.response.statusText, text: e.response.data.error}))
     }
@@ -131,9 +160,31 @@ class Profile extends React.Component {
                 <Card className={CSS.root}>
                     {toShow}
                 </Card>
-                <Card className={CSS.root}>
-                    //TODO: Fetch and show comments along with delete, and hide
+                {this.state.comments.length > 0 &&
+                <Card className={CSS.posts}>
+                    {this.state.comments.map((val, key) => (
+                        <Card className={CSS.postCard}>
+                            {val.hidden ?
+                                <AddIcon className={CSS.editIcon} onClick={() => this.toggleVisibility(val._id)}/> :
+                                <ClearIcon className={CSS.editIcon} onClick={() => this.toggleVisibility(val._id)}/>
+                            }
+                            <DeleteIcon className={[CSS.editIcon, CSS.removeIcon].join(" ")}
+                                        onClick={() => this.deleteComment(val._id)}/>
+                            <Typography
+                                variant="body1"
+                                color="textSecondary"
+                                style={{cursor: "pointer"}}
+                                onClick={() => this.props.history.push(`/u/${val.fromID}`)}
+                            >{val.name}</Typography>
+                            <Typography style={{fontSize: "0.5rem"}}>{new Date(val.date).toLocaleString()}</Typography>
+                            <Typography variant="h6" style={{fontWeight: "bold"}}>{val.title}</Typography>
+                            <Typography variant="body1">{val.comment}</Typography>
+                            {val.edited && <Typography
+                                variant="body2">{`Edited at ${new Date(val.editedTime).toLocaleString()}`}</Typography>}
+                        </Card>
+                    ))}
                 </Card>
+                }
             </>
         )
     }

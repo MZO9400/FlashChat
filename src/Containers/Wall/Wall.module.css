@@ -1,0 +1,13 @@
+.posts {
+    position: relative;
+    max-width: 80%;
+    margin-left: 10%;
+    padding: 2.5%;
+    margin-top: 5%;
+}
+
+.postCard {
+    position: relative;
+    padding: 2.5% 5%;
+    margin: 1em;
+}

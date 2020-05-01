@@ -225,7 +225,7 @@ class LoginPage extends React.Component {
         username: ""
     };
     validateSignIn = () => {
-        const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g;
+        const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g;
         const passRegex = /^(?=.*\d).{4,8}$/; // 4-8 with one digit
         return emailRegex.test(this.state.email) && passRegex.test(this.state.pass);
     };

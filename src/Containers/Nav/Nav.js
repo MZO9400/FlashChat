@@ -59,6 +59,8 @@ const Nav = props => {
     React.useEffect(() => {
         props.checkLogStatus(() =>
             props.history.push(props.redirect === "/login" ? "/" : props.redirect));
+        // hacky alternative to componentDidMount() lifecycle
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     let [loggedInMenuOpen, setLoggedInMenuOpen] = React.useState(false);
     let title;

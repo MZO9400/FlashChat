@@ -55,7 +55,7 @@ const ToRender = connect(mapStateToProps)(withRouter(toRender));
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
-            <BrowserRouter>
+            <BrowserRouter basename="/FlashChat">
                 <CssBaseline/>
                 <ErrorHandler/>
                 <ToRender/>

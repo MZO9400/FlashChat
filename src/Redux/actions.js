@@ -1,7 +1,7 @@
 import * as actionTypes from "./actionTypes";
-import Axios from 'axios';
 import decode from 'jwt-decode';
 import {setAuthToken} from '../headers';
+import Axios from '../axiosInstance';
 
 export const setLoggingAction = () => {
     return (dispatch) => {
@@ -40,7 +40,7 @@ export const logOut = () => {
 export const signInEmail = (email, password, callback) => {
     return (dispatch) => {
         dispatch({type: actionTypes.LOGGING_ACTION})
-        Axios.post("http://localhost:8000/api/users/login", {email, password})
+        Axios.post("/api/users/login", {email, password})
             .then(res => {
                 localStorage.setItem("JWToken", res.data.token);
                 setAuthToken(res.data.token);
@@ -62,7 +62,7 @@ export const signInEmail = (email, password, callback) => {
 };
 export const signUpEmail = (email, password, name, user, callback) => {
     return (dispatch) => {
-        Axios.post("http://localhost:8000/api/users/register", {email, name, password, user})
+        Axios.post("/api/users/register", {email, name, password, user})
             .then(() => dispatch(signInEmail(email, password, callback)))
             .catch(e => dispatch({
                 type: actionTypes.ERROR, payload: {title: e.response.statusText, text: e.response.data.error}
@@ -77,7 +77,7 @@ export const resetErrorCode = () => {
     };
 };
 export const getProfileInfo = (uid) => {
-    return Axios.post("http://localhost:8000/api/users/getInfo", {uid})
+    return Axios.post("/api/users/getInfo", {uid})
         .then(res => res)
         .catch(er => console.log(er));
 }

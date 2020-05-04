@@ -10,7 +10,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
 import {withRouter} from 'react-router-dom';
-import Axios from 'axios';
+import Axios from '../../axiosInstance';
 import * as actionTypes from '../../Redux/actionTypes';
 
 class Profile extends React.Component {
@@ -32,7 +32,7 @@ class Profile extends React.Component {
             date: data.date,
             username: data._id
         })
-        Axios.post("http://localhost:8000/api/comments/getAll", {userID: this.props.uid})
+        Axios.post("/api/comments/getAll", {userID: this.props.uid})
             .then(res => this.setState({comments: res.data ? res.data : []}));
     }
 
@@ -58,14 +58,14 @@ class Profile extends React.Component {
         if (this.state.newPass) {
             data.newPass = this.state.newPass;
         }
-        Axios.post("http://localhost:8000/api/users/setInfo", data).then(res => {
+        Axios.post("/api/users/setInfo", data).then(res => {
             if (res.status === 200) {
                 this.props.history.push("/");
             }
         }).catch(e => this.props.setError({title: e.response.statusText, text: e.response.data.error}))
     }
     toggleVisibility = (_id) => {
-        Axios.post("http://localhost:8000/api/comments/toggleVisibility", {_id}).then(res => {
+        Axios.post("/api/comments/toggleVisibility", {_id}).then(res => {
             if (res.status === 200) {
                 const comments = [...this.state.comments];
                 for (let i = 0; i < comments.length; i++) {
@@ -79,7 +79,7 @@ class Profile extends React.Component {
         }).catch(e => this.props.setError({title: e.response.statusText, text: e.response.data.error}))
     }
     deleteComment = (_id) => {
-        Axios.post("http://localhost:8000/api/comments/delete", {_id}).then(res => {
+        Axios.post("/api/comments/delete", {_id}).then(res => {
             if (res.status === 200) {
                 console.log(res);
                 const comments = [...this.state.comments].filter(i => i._id !== _id);

@@ -1,5 +1,5 @@
 import React from 'react';
-import Axios from 'axios';
+import Axios from '../../axiosInstance';
 import {withRouter} from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import Card from "@material-ui/core/Card";
@@ -36,7 +36,7 @@ class UserProfile extends React.Component {
             this.componentDidMount();
         }
         if (this.props.loggedIn !== prevProps.loggedIn && this.props.loggedIn !== "") {
-            Axios.post("http://localhost:8000/api/users/getFriendshipStatus", {id: this.state.id})
+            Axios.post("/api/users/getFriendshipStatus", {id: this.state.id})
                 .then(response => this.setState({isFriend: response.data.friendshipStatus}))
                 .catch(e => {
                     this.props.setError({title: "Error", text: e.response.data.error})
@@ -46,7 +46,7 @@ class UserProfile extends React.Component {
     componentDidMount = async () => {
         const {id} = this.props.match.params;
         this.setState({id})
-        Axios.post("http://localhost:8000/api/users/getInfoPub", {uid: id})
+        Axios.post("/api/users/getInfoPub", {uid: id})
             .then(response => {
                 if (!response.data) {
                     this.props.setError({title: "Error", text: "User not found"});
@@ -57,7 +57,7 @@ class UserProfile extends React.Component {
             .catch(e => {
                 this.props.setError({title: "Error", text: e.response.data.error})
             });
-        Axios.post("http://localhost:8000/api/comments/getPublic", {id})
+        Axios.post("/api/comments/getPublic", {id})
             .then(response => {
                 this.setState({comments: response.data ? response.data : []})
             })
@@ -73,7 +73,7 @@ class UserProfile extends React.Component {
         if (this.state.newPostTitle.length) {
             payload.title = this.state.newPostTitle;
         }
-        Axios.post("http://localhost:8000/api/comments/postNew", payload)
+        Axios.post("/api/comments/postNew", payload)
             .then(() => {
                 this.setState({
                     newPostTitle: "",
@@ -86,7 +86,7 @@ class UserProfile extends React.Component {
         return (this.state.newPostText.length > 0);
     }
     deleteComment = (_id) => {
-        Axios.post("http://localhost:8000/api/comments/delete", {_id}).then(res => {
+        Axios.post("/api/comments/delete", {_id}).then(res => {
             if (res.status === 200) {
                 console.log(res);
                 const comments = [...this.state.comments].filter(i => i._id !== _id);
@@ -98,7 +98,7 @@ class UserProfile extends React.Component {
         if (!this.props.loggedIn) {
             this.props.history.push("/login");
         }
-        Axios.post("http://localhost:8000/api/users/toggleFriend", {_id: this.state.id})
+        Axios.post("/api/users/toggleFriend", {_id: this.state.id})
             .then(() => {
                 if (this.state.isFriend === "none") {
                     this.setState({isFriend: "pending"});
@@ -141,7 +141,7 @@ class UserProfile extends React.Component {
                         })
                     }}>Cancel</Button>
                     <Button onClick={() => {
-                        Axios.post("http://localhost:8000/api/comments/edit", {
+                        Axios.post("/api/comments/edit", {
                             _id: this.state.editing,
                             title: this.state.commentEditTitle,
                             comment: this.state.commentEditText,

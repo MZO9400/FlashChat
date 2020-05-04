@@ -1,5 +1,5 @@
 import React from "react";
-import Axios from 'axios';
+import Axios from '../../axiosInstance';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom'
 import * as actionTypes from "../../Redux/actionTypes";
@@ -24,7 +24,7 @@ class Wall extends React.Component {
         window.removeEventListener("scroll", this.onScroll, false);
     }
     fetchNextPosts = () => {
-        Axios.post("http://localhost:8000/api/users/populateWall",
+        Axios.post("/api/users/populateWall",
             {limit: this.state.fetchSize, page: this.state.page})
             .then(response => this.setState({
                 posts: [...this.state.posts, ...response.data.posts],

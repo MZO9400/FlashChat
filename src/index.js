@@ -13,6 +13,8 @@ import {connect, Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import ErrorHandler from "./ErrorHandler";
 
+require('dotenv').config();
+
 const toRender = props => {
     const privateRoutes = (
         <>

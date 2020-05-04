@@ -11,6 +11,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import * as actions from "../../Redux/actions";
 import {connect} from "react-redux";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
 
 const useStylesSU = makeStyles(theme => ({
     paper: {
@@ -87,18 +89,22 @@ function SignUp(props) {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
-                                value={props.pass.val}
-                                onChange={e => props.pass.fn(e)}
-                            />
+                            <FormControl fullWidth>
+                                <TextField
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="current-password"
+                                    value={props.pass.val}
+                                    onChange={e => props.pass.fn(e)}
+                                />
+                                <FormHelperText>Length: 4-16 characters</FormHelperText>
+                                <FormHelperText>Must have at least one number</FormHelperText>
+                            </FormControl>
                         </Grid>
                         <Grid item xs={12}/>
                     </Grid>
@@ -226,7 +232,7 @@ class LoginPage extends React.Component {
     };
     validateSignIn = () => {
         const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g;
-        const passRegex = /^(?=.*\d).{4,8}$/; // 4-8 with one digit
+        const passRegex = /^(?=.*\d).{4,16}$/; // 4-16 with atleast one digit
         return emailRegex.test(this.state.email) && passRegex.test(this.state.pass);
     };
     validateSignUp = () => {

@@ -19,6 +19,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 import HourglassFullIcon from '@material-ui/icons/HourglassFull';
+import {Avatar} from "@material-ui/core";
 
 class UserProfile extends React.Component {
     state = {
@@ -29,7 +30,11 @@ class UserProfile extends React.Component {
         commentEditText: "",
         editing: false,
         isFriend: "none",
-        comments: []
+        comments: [],
+        avatar: {
+            image: "",
+            mimetype: ""
+        }
     }
     componentDidUpdate = (prevProps) => {
         if (this.props.match.params.id !== this.state.id) {
@@ -64,6 +69,8 @@ class UserProfile extends React.Component {
             .catch(e => {
                 this.props.setError({title: "Error", text: e.response.data.error})
             });
+        Axios.post("/api/users/image", {uid: id})
+            .then(res => this.setState({avatar: res.data}))
     }
     addPost = () => {
         const payload = {
@@ -165,6 +172,9 @@ class UserProfile extends React.Component {
             <Container maxWidth="md">
                 {editing}
                 <Card className={CSS.root}>
+                    <Avatar className={CSS.avatar}
+                            src={`data:${this.state.avatar.mimetype};base64,${this.state.avatar.image}`}
+                    >{this.state.name && this.state.name[0].toUpperCase()}</Avatar>
                     {(this.state.id !== this.props.loggedIn) ? this.state.isFriend === "none" ?
                         <PersonAddIcon className={CSS.editIcon} onClick={this.toggleFriend}/> :
                         this.state.isFriend === "pending" ?

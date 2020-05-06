@@ -24,8 +24,19 @@
 }
 
 .avatar {
+    width: 80px !important;
+    height: 80px !important;
     margin-bottom: 1em;
+    position: relative;
+    cursor: pointer;
 }
+
+.avatarPlus {
+    position: absolute;
+    bottom: 10%;
+    right: 10%;
+}
+
 
 .editIcon {
     position: absolute;

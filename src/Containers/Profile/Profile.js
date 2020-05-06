@@ -21,7 +21,12 @@ class Profile extends React.Component {
         currentPass: "",
         newPass: "",
         editing: false,
-        comments: []
+        comments: [],
+        username: "",
+        avatar: {
+            image: "",
+            mimetype: ""
+        }
     }
 
     componentDidMount = async () => {
@@ -34,8 +39,12 @@ class Profile extends React.Component {
         })
         Axios.post("/api/comments/getAll", {userID: this.props.uid})
             .then(res => this.setState({comments: res.data ? res.data : []}));
+        Axios.post("/api/users/image", {uid: this.props.uid})
+            .then(res => {
+                const image64 = res.data;
+                this.setState({avatar: image64})
+            })
     }
-
     changeName = (v) => {
         this.setState({name: v});
     }
@@ -87,11 +96,33 @@ class Profile extends React.Component {
             }
         }).catch(e => this.props.setError({title: e.response.statusText, text: e.response.data.error}))
     }
+    updateAvatar = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            const formData = new FormData();
+            let reader = new FileReader();
+            let file = event.target.files[0];
+            reader.onloadend = () => {
+                this.setState({
+                    avatar: reader.result,
+                });
+                formData.append("image", file);
+                const config = {
+                    headers: {
+                        "content-type": "multipart/form-data"
+                    }
+                }
+                Axios.put("/api/users/image", formData, config)
+                    .catch(e => this.props.setError({title: e.response.statusText, text: e.response.data.error}))
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 
     render() {
         let toShow = (<>
             <EditIcon className={CSS.editIcon} onClick={() => this.setState({editing: true})}/>
-            <Avatar className={CSS.avatar}>{this.state.name && this.state.name[0].toUpperCase()}</Avatar>
+            <Avatar className={CSS.avatar}
+                    src={`data:${this.state.avatar.mimetype};base64,${this.state.avatar.image}`}>{this.state.name && this.state.name[0].toUpperCase()}</Avatar>
             <Typography>
                 {this.state.name}
             </Typography>
@@ -112,7 +143,18 @@ class Profile extends React.Component {
             toShow = (
                 <>
                     <SaveIcon className={CSS.editIcon} onClick={this.updateProfile}/>
-                    <Avatar className={CSS.avatar}>{this.state.name && this.state.name[0].toUpperCase()}</Avatar>
+                    <input
+                        accept="image/*"
+                        onChange={this.updateAvatar}
+                        id="avatarselect"
+                        style={{display: "none"}}
+                        type="file"
+                    />
+                    <label htmlFor="avatarselect">
+                        <Avatar className={CSS.avatar} src={this.state.avatar}>
+                            <AddIcon className={CSS.avatarPlus}/>
+                        </Avatar>
+                    </label>
                     <form className={CSS.inputForm}>
                         <div className={CSS.inputpadding}>
                             <TextField

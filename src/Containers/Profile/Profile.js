@@ -40,10 +40,7 @@ class Profile extends React.Component {
         Axios.post("/api/comments/getAll", {userID: this.props.uid})
             .then(res => this.setState({comments: res.data ? res.data : []}));
         Axios.post("/api/users/image", {uid: this.props.uid})
-            .then(res => {
-                const image64 = res.data;
-                this.setState({avatar: image64})
-            })
+            .then(res => this.setState({avatar: res.data}))
     }
     changeName = (v) => {
         this.setState({name: v});
@@ -122,7 +119,8 @@ class Profile extends React.Component {
         let toShow = (<>
             <EditIcon className={CSS.editIcon} onClick={() => this.setState({editing: true})}/>
             <Avatar className={CSS.avatar}
-                    src={`data:${this.state.avatar.mimetype};base64,${this.state.avatar.image}`}>{this.state.name && this.state.name[0].toUpperCase()}</Avatar>
+                    src={`data:${this.state.avatar.mimetype};base64,${this.state.avatar.image}`}
+            >{this.state.name && this.state.name[0].toUpperCase()}</Avatar>
             <Typography>
                 {this.state.name}
             </Typography>

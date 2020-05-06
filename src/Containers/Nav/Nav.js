@@ -130,10 +130,14 @@ const Nav = props => {
     const searchHandler = () => {
         if (searchValue.length > 0) {
             Axios.post('/api/users/search', {search: searchValue})
-                .then(res => props.history.push({
-                    pathname: '/search',
-                    state: res.data
-                }))
+                .then(res => {
+                        setSearchValue("");
+                        props.history.push({
+                            pathname: '/search',
+                            state: res.data
+                        });
+                    }
+                )
         }
     }
     let volunteers = props.isAdmin ? (

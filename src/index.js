@@ -4,7 +4,8 @@ import './index.css';
 import Nav from './Containers/Nav/Nav';
 import Profile from './Containers/Profile/Profile';
 import Login from './Containers/Login/Login';
-import Wall from './Containers/Wall/Wall'
+import Wall from './Containers/Wall/Wall';
+import Search from './Components/Search/Search';
 import UserProfile from './Containers/UserProfile/UserProfile';
 import {CssBaseline} from '@material-ui/core';
 import {BrowserRouter, Redirect, Route, withRouter} from 'react-router-dom';
@@ -33,6 +34,7 @@ const toRender = props => {
     )
     const publicRoutes = (
         <>
+            <Route path="/search" component={Search}/>
             <Route path="/u/:id" component={UserProfile}/>
         </>
     )

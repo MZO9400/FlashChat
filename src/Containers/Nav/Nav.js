@@ -12,12 +12,15 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import HomeIcon from "@material-ui/icons/Home";
 import FavoriteRoundedIcon from "@material-ui/icons/FavoriteRounded";
 import StarsIcon from "@material-ui/icons/Stars";
+import SearchIcon from "@material-ui/icons/Search";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
-import {Divider, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer} from "@material-ui/core";
+import {Divider, fade, List, ListItem, ListItemIcon, ListItemText, SwipeableDrawer} from "@material-ui/core";
 import * as actions from "../../Redux/actions";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import InputBase from "@material-ui/core/InputBase";
+import Axios from '../../axiosInstance';
 
 
 const useStyles = makeStyles(theme => ({
@@ -33,6 +36,46 @@ const useStyles = makeStyles(theme => ({
     list: {
         width: 250,
         cursor: "pointer"
+    },
+    search: {
+        position: 'relative',
+        borderRadius: theme.shape.borderRadius,
+        backgroundColor: fade(theme.palette.common.white, 0.15),
+        '&:hover': {
+            backgroundColor: fade(theme.palette.common.white, 0.25),
+        },
+        marginLeft: 0,
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            marginLeft: theme.spacing(1),
+            marginRight: theme.spacing(2),
+            width: 'auto',
+        },
+    },
+    searchIcon: {
+        padding: theme.spacing(0, 2),
+        height: '100%',
+        position: 'absolute',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: "pointer"
+    },
+    inputRoot: {
+        color: 'inherit',
+    },
+    inputInput: {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            width: '12ch',
+            '&:focus': {
+                width: '20ch',
+            },
+        },
     }
 }));
 
@@ -63,6 +106,7 @@ const Nav = props => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     let [loggedInMenuOpen, setLoggedInMenuOpen] = React.useState(false);
+    let [searchValue, setSearchValue] = React.useState('');
     let title;
     switch (props.location.pathname) {
         case "/provide-a-service":
@@ -83,6 +127,15 @@ const Nav = props => {
     }
     const classes = useStyles();
     let [isDrawerOpen, setDrawer] = React.useState(false);
+    const searchHandler = () => {
+        if (searchValue.length > 0) {
+            Axios.post('/api/users/search', {search: searchValue})
+                .then(res => props.history.push({
+                    pathname: '/search',
+                    state: res.data
+                }))
+        }
+    }
     let volunteers = props.isAdmin ? (
         <ListItem onClick={() => props.history.push("/volunteers")}>
             <ListItemIcon>
@@ -109,6 +162,22 @@ const Nav = props => {
                             {title}
                         </Typography>
                         {props.isAdmin ? <StarsIcon/> : null}
+                        <div className={classes.search}>
+                            <div className={classes.searchIcon} onClick={searchHandler}>
+                                <SearchIcon/>
+                            </div>
+                            <InputBase
+                                placeholder="Search…"
+                                classes={{
+                                    root: classes.inputRoot,
+                                    input: classes.inputInput,
+                                }}
+                                value={searchValue}
+                                onChange={(e) => setSearchValue(e.target.value)}
+                                inputProps={{'aria-label': 'search'}}
+                                onKeyDown={(e) => e.key === 'Enter' ? searchHandler() : null}
+                            />
+                        </div>
                         {props.loggingAction ? (
                             <CircularIndeterminate/>
                         ) : props.loggedIn ? (

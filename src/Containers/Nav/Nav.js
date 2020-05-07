@@ -109,17 +109,20 @@ const Nav = props => {
     let [searchValue, setSearchValue] = React.useState('');
     let title;
     switch (props.location.pathname) {
-        case "/provide-a-service":
-            title = "Provide a service";
-            break;
         case "/login":
             title = "Sign in";
             break;
+        case "/profile":
+            title = props.loggedIn;
+            break;
+        case "/u/:uid":
+            title = "User";
+            break;
+        case "/search":
+            title = "Search";
+            break;
         case "/":
             title = "Home";
-            break;
-        case "/volunteers":
-            title = "See Volunteers";
             break;
         default:
             title = "Home";
@@ -140,14 +143,6 @@ const Nav = props => {
                 )
         }
     }
-    let volunteers = props.isAdmin ? (
-        <ListItem onClick={() => props.history.push("/volunteers")}>
-            <ListItemIcon>
-                <StarsIcon/>
-            </ListItemIcon>
-            <ListItemText>Volunteers</ListItemText>
-        </ListItem>
-    ) : null;
     return (
         <React.Fragment>
             <div className={classes.root}>
@@ -245,7 +240,6 @@ const Nav = props => {
                         </ListItem>
                     </List>
                     <Divider/>
-                    {volunteers}
 
                     {props.loggingAction ? (
                         <CircularIndeterminate/>

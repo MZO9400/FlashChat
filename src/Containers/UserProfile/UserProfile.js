@@ -19,6 +19,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import HowToRegIcon from '@material-ui/icons/HowToReg';
 import HourglassFullIcon from '@material-ui/icons/HourglassFull';
+import MessageIcon from '@material-ui/icons/Message';
 import {Avatar} from "@material-ui/core";
 
 class UserProfile extends React.Component {
@@ -115,6 +116,9 @@ class UserProfile extends React.Component {
             })
             .catch(e => this.props.setError({title: "Error", text: e.response.data.error}));
     }
+    chatWith = id => {
+        Axios.post("/api/chats/getChatID", {id});
+    }
 
     render() {
         let editing = (
@@ -179,7 +183,12 @@ class UserProfile extends React.Component {
                         <PersonAddIcon className={CSS.editIcon} onClick={this.toggleFriend}/> :
                         this.state.isFriend === "pending" ?
                             <HourglassFullIcon className={CSS.editIcon} onClick={this.toggleFriend}/> :
-                            <HowToRegIcon className={CSS.editIcon} onClick={this.toggleFriend}/> : null
+                            <>
+                                <HowToRegIcon className={CSS.editIcon} onClick={this.toggleFriend}/>
+                                <MessageIcon className={[CSS.editIcon, CSS.removeIcon].join(" ")}
+                                             onClick={() => this.chatWith(this.state.id)}/>
+                            </>
+                        : null
                     }
                     <Typography color="textSecondary">{this.state.id}</Typography>
                     {this.state.name && <Typography>{this.state.name}</Typography>}

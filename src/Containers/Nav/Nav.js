@@ -225,33 +225,34 @@ const Nav = props => {
                     onClick={() => setDrawer(false)}
                     onKeyDown={() => setDrawer(false)}
                 >
-                    <List>
-                        <ListItem onClick={() => props.history.push("/")}>
-                            <ListItemIcon>
-                                <HomeIcon/>
-                            </ListItemIcon>
-                            <ListItemText>Home</ListItemText>
-                        </ListItem>
-                        <ListItem onClick={() => props.history.push("/profile")}>
-                            <ListItemIcon>
-                                <FavoriteRoundedIcon/>
-                            </ListItemIcon>
-                            <ListItemText>Profile</ListItemText>
-                        </ListItem>
-                    </List>
-                    <Divider/>
-
                     {props.loggingAction ? (
                         <CircularIndeterminate/>
                     ) : props.loggedIn ? (
-                        <List onClick={() => props.logOut()}>
-                            <ListItem>
-                                <ListItemIcon>
-                                    <AccountCircleIcon/>
-                                </ListItemIcon>
-                                <ListItemText>Sign out</ListItemText>
-                            </ListItem>
-                        </List>
+                        <>
+                            <List>
+                                <ListItem onClick={() => props.history.push("/")}>
+                                    <ListItemIcon>
+                                        <HomeIcon/>
+                                    </ListItemIcon>
+                                    <ListItemText>Home</ListItemText>
+                                </ListItem>
+                                <ListItem onClick={() => props.history.push("/profile")}>
+                                    <ListItemIcon>
+                                        <FavoriteRoundedIcon/>
+                                    </ListItemIcon>
+                                    <ListItemText>Profile</ListItemText>
+                                </ListItem>
+                            </List>
+                            <Divider/>
+                            <List onClick={() => props.logOut()}>
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <AccountCircleIcon/>
+                                    </ListItemIcon>
+                                    <ListItemText>Sign out</ListItemText>
+                                </ListItem>
+                            </List>
+                        </>
                     ) : (
                         <List onClick={() => props.history.push("/login")}>
                             <ListItem>

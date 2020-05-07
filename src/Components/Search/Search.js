@@ -5,19 +5,18 @@ import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import {withRouter} from 'react-router-dom';
 
-export default withRouter(props => {
-    return (
-        <Container maxWidth="md">
+export default withRouter(props =>
+    <Container maxWidth="md">
             {props.location.state.result.map((value, key) =>
                 <Card
                     key={key}
                     onClick={() => props.history.push(`/u/${value._id}`)}
                     style={{
-                        cursor: "pointer",
-                        display: "flex",
-                        alignContent: "center",
-                        alignItems: "center",
-                        padding: "1.5em"
+                            cursor: "pointer",
+                            display: "flex",
+                            alignContent: "center",
+                            alignItems: "center",
+                            padding: "1.5em"
                     }}
                 >
                     <Avatar
@@ -26,5 +25,4 @@ export default withRouter(props => {
                 </Card>
             )}
         </Container>
-    )
-})
+)

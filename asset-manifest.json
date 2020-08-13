@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/FlashChat/static/css/main.960bafda.chunk.css",
+    "main.js": "/FlashChat/static/js/main.cfe6232a.chunk.js",
+    "main.js.map": "/FlashChat/static/js/main.cfe6232a.chunk.js.map",
+    "runtime-main.js": "/FlashChat/static/js/runtime-main.d05fb8a8.js",
+    "runtime-main.js.map": "/FlashChat/static/js/runtime-main.d05fb8a8.js.map",
+    "static/js/2.335d3478.chunk.js": "/FlashChat/static/js/2.335d3478.chunk.js",
+    "static/js/2.335d3478.chunk.js.map": "/FlashChat/static/js/2.335d3478.chunk.js.map",
+    "index.html": "/FlashChat/index.html",
+    "precache-manifest.bd3892b2d64121d27fe32add2ef723d6.js": "/FlashChat/precache-manifest.bd3892b2d64121d27fe32add2ef723d6.js",
+    "service-worker.js": "/FlashChat/service-worker.js",
+    "static/css/main.960bafda.chunk.css.map": "/FlashChat/static/css/main.960bafda.chunk.css.map",
+    "static/js/2.335d3478.chunk.js.LICENSE.txt": "/FlashChat/static/js/2.335d3478.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d05fb8a8.js",
+    "static/js/2.335d3478.chunk.js",
+    "static/css/main.960bafda.chunk.css",
+    "static/js/main.cfe6232a.chunk.js"
+  ]
+}
